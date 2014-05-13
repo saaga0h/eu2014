@@ -15,7 +15,7 @@ function bars () {
     selection.each(function (data) {
 
       width = data.length * blockWidth + (data.length - 1) * gap + 2 * margin;
-      height = 300;
+      height = 170;
 
       /*
       var color = d3.scale.quantile()
@@ -23,7 +23,7 @@ function bars () {
           .range(['#bef0bf', '#1c7ac4', '#ffa000', '#f60067']);
       */
       var y = d3.scale.linear()
-                .domain([0, 100])
+                .domain([0, 81])
                 .range([height, 0]);
 
       var _width = (width - gap * (data.length - 1)) / data.length;
@@ -42,10 +42,10 @@ function bars () {
           return blockWidth;
         })
         .attr('height', function (d) {
-          return height - y(d.age);
+          return height - y(d.age ? d.age : 17);
         })
         .attr('y', function (d) {
-          return y(d.age);
+          return y(d.age ? d.age : 17);
         })
         .attr('x', function (d, i) {
           return i * blockWidth + i * gap;
@@ -60,10 +60,10 @@ function bars () {
         title: function() {
           var d = this.__data__;//, c = colors(d.i);
           var p = parties.filter(function (v) {
-            return parseInt(Object.keys(v)[0]) == d.party;
-          });
-          p = p[0][Object.keys(p[0])];
-          return '<strong>' + p + '</strong><br><span>' + d.person + '</span> <em>(' + d.age + ')</em>';
+            return v.id == d.party;
+          })[0];
+          //p = p[0][Object.keys(p[0])];
+          return '<strong>' + p.name + '</strong><br><span>' + d.person + '</span> <em>(' + (d.age ? d.age : 'Ei tiedossa') + ')</em>';
         }
       });
     });

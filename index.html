@@ -13,13 +13,17 @@
     <script src="jquery.tipsy.js" type="text/javascript"></script>
     <script src="d3.js" charset="utf-8"></script>
     <script src="thenby.js" type="text/javascript"></script>
+    <script src="legend.js" type="text/javascript"></script>
     <script src="bars.js" type="text/javascript"></script>
     <script src="heatmap.js" type="text/javascript"></script>
 </head>
 
 <body>
     <div id="content">
-      <h1>EU Vaalit 2014</h1>
+      <h1>
+        EU Vaalit 2014
+        <a href="https://twitter.com/mircurios" class="handle">@mircurios</a>
+      </h1>
       <div id="filters">
         <label>Ikä
           <select id="a">
@@ -32,7 +36,9 @@
           </select>
         </label>
       </div>
+      <div id="parties"></div>
       <svg id="age" />
+      <div id="answers"></div>
       <svg id="candidates" />
     </div>
 

@@ -32,31 +32,56 @@ var questions = [
   {'q5798': 'Mitä mieltä olet väitteestä: Energia- ja ilmastopolitiikassa etusijalle on asetettava teollisuuden kilpailukyky.'},
   {'q5799': 'Mitä mieltä olet väitteestä: Euroopan siirtymistä uusiutuvan energian käyttämiseen on nopeutettava, vaikka se nostaisi sähkön ja polttoaineiden hintoja.'}];
 
-var answers = {
-  0: 'Täysin samaa mieltä',
-  1: '',
-  2: 'Ohita',
-  3: '',
-  4: 'Täysin eri mieltä'
-};
+var answers = [
+  { id: 0,
+    name:'Täysin samaa mieltä' },
+  { id: 1,
+    name: '' },
+  { id: 2,
+    name: 'Ohita'},
+  { id: 3,
+    name: '' },
+  { id: 4,
+    name: 'Täysin eri mieltä' }
+];
 
 var parties = [
-  { 170: 'Itsenäisyyspuolue' },
-  { 171: 'KD' },
-  { 172: 'Suomen Keskusta' },
-  { 173: 'Kansallinen Kokoomus' },
-  { 174: 'Köyhien Asialla' },
-  { 176: 'Muutos 2011' },
-  { 177: 'Perussuomalaiset' },
-  { 178: 'Piraattipuolue' },
-  { 179: 'Suomen Sosialidemokraattinen Puolue' },
-  { 180: 'Ruotsalainen kansanpuolue' },
-  { 181: 'Suomen Kommunistinen Puolue' },
-  { 183: 'Vasemmistoliitto' },
-  { 184: 'Vihreä liitto'},
-  { 185: 'Sinivalkoinen Rintama'},
-  { 186: 'Kristiina Ilmarinen valitsijayhdistys'}
+  { id: 170,
+    name: 'Itsenäisyyspuolue' },
+  { id:171,
+    name: 'KD' },
+  { id: 172,
+    name: 'Suomen Keskusta' },
+  { id: 173,
+    name: 'Kansallinen Kokoomus' },
+  { id: 174,
+    name: 'Köyhien Asialla' },
+  { id: 176,
+    name: 'Muutos 2011' },
+  { id: 177,
+    name: 'Perussuomalaiset' },
+  { id: 178,
+     name: 'Piraattipuolue' },
+  { id: 179,
+    name: 'Suomen Sosialidemokraattinen Puolue' },
+  { id: 180,
+    name: 'Ruotsalainen kansanpuolue' },
+  { id: 181,
+    name: 'Suomen Kommunistinen Puolue' },
+  { id: 183,
+    name: 'Vasemmistoliitto' },
+  { id: 184,
+    name: 'Vihreä liitto'},
+  { id: 185,
+    name: 'Sinivalkoinen Rintama'},
+  { id: 186,
+    name: 'Kristiina Ilmarinen valitsijayhdistys'}
 ];
+
+var l = legend();
+d3.select('#parties').datum(parties).call(l.prefixer('party-'));
+
+d3.select('#answers').datum(answers).call(l.prefixer('answer-'));
 
 // Age distribution
 var b = bars().parties(parties);

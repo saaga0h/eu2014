@@ -6,7 +6,7 @@ function heatmap () {
   var height = 800;
   var cornerRadius = 2;
   var blockSize = 30;
-  var blockHeight = 30;
+  var blockHeight = 24;
   var blockWidth = 4;
   var gap = 1;
   var yAxisValues;
@@ -111,7 +111,28 @@ function heatmap () {
                             });
 
       $('svg#candidates .block').tipsy({
-        gravity: 'n',
+        gravity: function () {
+          var d = this.__data__;
+          var dir;
+
+          if (d.x < 50)
+            return 'w';
+          else if (d.x < 50 && d.y < 10)
+            return 'se';
+          else if (d.x > 173)
+            return 'e';
+          else if (d.x > 173 && d.y > 20)
+            return 'nw'
+          else if (d.y > 20)
+            return 's';
+          else if (d.y > 20 && d.x < 50)
+            return 'nw';
+          else if (d.y > 20 && d.x > 173)
+            return 'nw'
+          else
+            return 'n';
+          return $.fn.tipsy.autoWE;//d.x < 50 && d.x > 183 ? $.fn.tipsy.autoWE : $.fn.tipsy.autoNS;
+        },
         html: true,
         title: function() {
           var d = this.__data__;//, c = colors(d.i);

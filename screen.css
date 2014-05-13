@@ -3,10 +3,57 @@ body {
   font-family: 'Source Sans Pro', sans-serif;
 }
 
+h1 .handle {
+  float: right;
+  font-size: 16px
+}
+
 #content {
   width: 1140px;
   padding: 0 3px;
-  margin: 0 auto 250px auto;
+  margin: 0 auto;
+}
+
+#parties {
+  -webkit-column-count: 5;
+  -moz-column-count: 5;
+  -ms-column-count: 5;
+}
+
+#answers {
+/*  -webkit-column-count: 5;
+  -moz-column-count: 5;
+  -ms-column-count: 5;
+*/}
+
+.legend {
+  margin-bottom: 5px;
+  height: 10px;
+  *zoom: 1;
+}
+
+.legend:before, .legend:after {
+  content: '';
+  display: table;
+}
+
+.legend:after {
+  clear: both;
+}
+
+.label {
+  font-size: 9px;
+  line-height: 10px;
+  float: left;
+}
+
+.icon {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: block;
+  float: left;
+  margin: 0 5px 0 0;
 }
 
 svg rect {
@@ -34,91 +81,126 @@ svg rect {
 .dimm {
   opacity: 0.15;
 }
+
+.answer-0 {
+  background: #17d71b;
+}
+
+.answer-1 {
+  background: #bef0bf;
+}
+
+.answer-2 {
+  background: #ebee19;
+}
+
+.answer-3 {
+  background: #e08488;
+}
+
+.answer-4 {
+  background: #e32932;
+}
 /* Itsenäisyyspuolue */
 .party-170 {
   color: #FFC640;
   fill: #FFC640;
+  background: #FFC640;
 }
 /* KD */
 .party-171 {
   color: #ff9300;
   fill: #ff9300;
+  background: #ff9300;
 }
 
 /* Suomen Keskusta */
 .party-172 {
   color: #71AD2C;
   fill: #71AD2C;
+  background: #71AD2C;
 }
 
 /* Kansallinen Kokoomus */
 .party-173 {
   color: #00577d;
   fill: #00577d;
+  background: #00577d;
 }
 
 /* Köyhien Asialla */
 .party-174 {
   color: #0d064a;
   fill: #0d064a;
+  background: #0d064a;
 }
 
 /* Muutos 2011 */
 .party-176 {
   color: #eee;
   fill: #eee;
+  background: #eee;
 }
 
 /* Perussuomalaiset */
 .party-177 {
   color: #015c96;
   fill: #015c96;
+  background: #015c96;
 }
 
 /* Piraattipuolue */
 .party-178 {
   color: #660099;
   fill: #660099;
+  background: #660099;
 }
 
 /* Suomen Sosialidemokraattinen Puolue */
 .party-179 {
   color: #f00;
   fill: #f00;
+  background: #f00;
 }
 
 /* Ruotsalainen kansanpuolue */
 .party-180 {
   color: #007bc0;
   fill: #007bc0;
+  background: #007bc0;
 }
 
 /* Suomen Kommunistinen Puolue */
 .party-181 {
   color: #da2301;
   fill: #da2301;
+  background: #da2301;
 }
 
 /* Vasemmistoliitto */
 .party-183 {
   color: #d2232a;
   fill: #d2232a;
+  background: #d2232a;
 }
 
 /* Vihreä liitto */
 .party-184 {
   color: #61bf1a;
   fill: #61bf1a;
+  background: #61bf1a;
 }
 
 /* Sinivalkoinen Rintama - Blue and White Front */
 .party-185 {
   color: orange;
   fill: orange;
+  background: orange;
 }
 
 /* Kristiina Ilmarinen valitsijayhdistys */
 .party-186 {
   color: rgb(16, 239, 16);
   fill: rgb(16, 239, 16);
+  background: rgb(16, 239, 16);
 }
