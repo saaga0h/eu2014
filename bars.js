@@ -60,10 +60,10 @@ function bars () {
         title: function() {
           var d = this.__data__;//, c = colors(d.i);
           var p = parties.filter(function (v) {
-            return v.id == d.party;
+            return v.id === d.party;
           })[0];
           //p = p[0][Object.keys(p[0])];
-          return '<strong>' + p.name + '</strong><br><span>' + d.person + '</span> <em>(' + (d.age ? d.age : 'Ei tiedossa') + ')</em>';
+          return '<strong>' + p.name + '</strong><br><span>' + d.person + '</span> <em>(' + (d.age ? d.age + ' vuotta' : 'Ei tiedossa') + ')</em>';
         }
       });
     });
@@ -92,6 +92,21 @@ function bars () {
           return d.id == i;
         } else {
           return true;
+        }
+      })
+      .classed('dimm', false);
+  };
+
+  chart.filterByGender = function (v) {
+    d3.selectAll('svg#age rect')
+      .classed('dimm', true)
+      .filter(function (d) {
+        if (v === undefined) {
+          return true;
+        } else if (v === d.gender) {
+          return true;
+        } else {
+          false;
         }
       })
       .classed('dimm', false);

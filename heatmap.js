@@ -6,13 +6,14 @@ function heatmap () {
   var height = 800;
   var cornerRadius = 2;
   var blockSize = 30;
-  var blockHeight = 24;
+  var blockHeight = 30;
   var blockWidth = 4;
   var gap = 1;
   var yAxisValues;
   var xAxisValues;
   var margin = 10;
   var questions = [];
+  var parties = [];
 
   function chart (selection) {
 
@@ -89,7 +90,10 @@ function heatmap () {
                           comment: v.comments[j],
                           age: v.age,
                           id: v.id,
-                          person: v.person
+                          person: v.person,
+                          party: v.party,
+                          gender: v.gender,
+                          candidateId: v.candidateId
                         });
         }
       });
@@ -152,7 +156,10 @@ function heatmap () {
         html: true,
         title: function() {
           var d = this.__data__;//, c = colors(d.i);
-          return '<strong>' + d.question[Object.keys(d.question)[0]] + '</strong><br><q>' + d.comment + '</q><br>- ' + d.person;
+          var p = parties.filter(function (v) {
+            return v.id === d.party;
+          })[0];
+          return '<strong>' + d.question[Object.keys(d.question)[0]] + '</strong><br><q>' + (d.comment != '' ? d.comment : 'Ei kommentia') + '</q><br>- ' + d.person + ' (' + p.name + ')';
         }
       });
     });
@@ -213,6 +220,27 @@ function heatmap () {
         }
       })
       .classed('dimm', false);
+  };
+
+  chart.filterByGender = function (v) {
+    d3.selectAll('svg#candidates .block')
+      .classed('dimm', true)
+      .filter(function (d) {
+        if (v === undefined) {
+          return true;
+        } else if (v === d.gender) {
+          return true;
+        } else {
+          false;
+        }
+      })
+      .classed('dimm', false);
+  };
+
+  chart.parties = function (v) {
+    if (!arguments.length) return parties;
+    parties = v;
+    return chart;
   };
 
   chart.width = function (v) {

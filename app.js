@@ -93,7 +93,7 @@ var b = bars().parties(parties);
 //});
 
 // Heatmap
-var h = heatmap().questions(questions);
+var h = heatmap().questions(questions).parties(parties);
 
 // filter
 var self = this;
@@ -118,6 +118,8 @@ d3.tsv('candidates.tsv', function (res) {
     party: parseInt(res['Puolue']),
     age: parseInt(res['Ikä']),
     person: res['Etunimi'] + ' ' + res['Sukunimi'],
+    candidateId: res['Ehdokasnumero'],
+    gender: res['Sukupuoli'],
     answers: [],
     comments: []
   };
@@ -141,6 +143,18 @@ d3.tsv('candidates.tsv', function (res) {
 
   d3.select('svg#candidates').datum(data).call(h);
   d3.select('svg#age').datum(data).call(b);
+
+  // Filter genders
+  var genders = { F: 0, M: 0, X: 0};
+
+  data.map(function (v) {
+    if (v.gender === 'F' || v.gender === 'M')
+      genders[v.gender] = genders[v.gender] + 1;
+    else
+      genders['X'] = genders['X'] + 1;
+  });
+
+  console.log(genders);
 });
 
 
@@ -164,4 +178,10 @@ $('body').on('change', 'select#a', function (e) {
   var v = $(e.target).val().split('..').map(function (v) { return parseInt(v); });
   self.h.filterByAge(v[0], v[1]);
   self.b.filterByAge(v[0], v[1]);
+});
+
+$('body').on('change', 'select#s', function (e) {
+  var v = $(e.target).val();
+  self.h.filterByGender(v);
+  self.b.filterByGender(v);
 });
