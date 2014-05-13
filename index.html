@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=4.0, user-scalable=yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>EU Vaalit 2014</title>
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="screen.css">
+    <link rel="stylesheet" type="text/css" href="tipsy.css">
+    <script src="jquery.js" type="text/javascript"></script>
+    <script src="jquery.tipsy.js" type="text/javascript"></script>
+    <script src="d3.js" charset="utf-8"></script>
+    <script src="thenby.js" type="text/javascript"></script>
+    <script src="bars.js" type="text/javascript"></script>
+    <script src="heatmap.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <div id="content">
+      <h1>EU Vaalit 2014</h1>
+      <div id="filters">
+        <label>Ikä
+          <select id="a">
+            <option value="0..130" selected="selected">Kaikki</option>
+            <option value="0..30">&lt; 30</option>
+            <option value="30..40">30 - 40</option>
+            <option value="40..50">40 - 50</option>
+            <option value="50..65">50 - 65</option>
+            <option value="65..130">&gt; 65</option>
+          </select>
+        </label>
+      </div>
+      <svg id="age" />
+      <svg id="candidates" />
+    </div>
+
+    <script src="app.js" type="text/javascript"></script>
+
+</body>
+</html>

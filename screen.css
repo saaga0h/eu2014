@@ -1,0 +1,124 @@
+body {
+  font-size: 100%;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+#content {
+  width: 1140px;
+  padding: 0 3px;
+  margin: 0 auto 250px auto;
+}
+
+svg rect {
+  /* stroke-width: 1px;
+  stroke-opacity: 0.6;*/
+}
+
+.arvot, .talous, .valta {
+  /*stroke-width: 3px;
+  stroke-opacity: 0.6;*/
+}
+.arvot {
+  /*stroke: ;*/
+  fill: #1c7ac4;
+}
+
+.talous {
+  fill: #ffa000;
+}
+
+.valta {
+  fill: #f60067;
+}
+
+.dimm {
+  opacity: 0.15;
+}
+/* Itsenäisyyspuolue */
+.party-170 {
+  color: #FFC640;
+  fill: #FFC640;
+}
+/* KD */
+.party-171 {
+  color: #ff9300;
+  fill: #ff9300;
+}
+
+/* Suomen Keskusta */
+.party-172 {
+  color: #71AD2C;
+  fill: #71AD2C;
+}
+
+/* Kansallinen Kokoomus */
+.party-173 {
+  color: #00577d;
+  fill: #00577d;
+}
+
+/* Köyhien Asialla */
+.party-174 {
+  color: #0d064a;
+  fill: #0d064a;
+}
+
+/* Muutos 2011 */
+.party-176 {
+  color: #eee;
+  fill: #eee;
+}
+
+/* Perussuomalaiset */
+.party-177 {
+  color: #015c96;
+  fill: #015c96;
+}
+
+/* Piraattipuolue */
+.party-178 {
+  color: #660099;
+  fill: #660099;
+}
+
+/* Suomen Sosialidemokraattinen Puolue */
+.party-179 {
+  color: #f00;
+  fill: #f00;
+}
+
+/* Ruotsalainen kansanpuolue */
+.party-180 {
+  color: #007bc0;
+  fill: #007bc0;
+}
+
+/* Suomen Kommunistinen Puolue */
+.party-181 {
+  color: #da2301;
+  fill: #da2301;
+}
+
+/* Vasemmistoliitto */
+.party-183 {
+  color: #d2232a;
+  fill: #d2232a;
+}
+
+/* Vihreä liitto */
+.party-184 {
+  color: #61bf1a;
+  fill: #61bf1a;
+}
+
+/* Sinivalkoinen Rintama - Blue and White Front */
+.party-185 {
+  color: orange;
+  fill: orange;
+}
+
+/* Kristiina Ilmarinen valitsijayhdistys */
+.party-186 {
+  color: rgb(16, 239, 16);
+  fill: rgb(16, 239, 16);
+}
