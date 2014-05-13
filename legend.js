@@ -18,6 +18,9 @@ function legend () {
                 .enter()
                 .append('div')
                 .classed('legend', true)
+                .attr('data-id', function (d) {
+                  return d.id;
+                })
                 .html(function (d) {
                   return '<span class="icon ' + prefixer + d.id + '"></span> \
                           <span class="label">' + d.name + '</span>';

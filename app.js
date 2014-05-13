@@ -160,8 +160,8 @@ d3.tsv('candidates.tsv', function (res) {
 
 var filtered;
 
-$('body').on('click', 'svg#candidates rect', function (e) {
-  var id = parseInt($(e.currentTarget).attr('data-p-id'));
+$('body').on('click', 'svg#candidates rect, svg#age rect', function (e) {
+  var id = parseInt($(e.currentTarget).attr('data-id'));
   console.log(id);
   if (filtered != id) {
     self.b.filterById(id);
@@ -170,6 +170,36 @@ $('body').on('click', 'svg#candidates rect', function (e) {
   } else {
     self.b.filterById();
     self.h.filterById();
+    filtered = undefined;
+  }
+});
+
+$('body').on('click', '#parties .legend', function (e) {
+  var id = parseInt($(e.currentTarget).attr('data-id'));
+  console.log(id);
+
+  if (filtered != id) {
+    self.b.filterByParty(id);
+    self.h.filterByParty(id);
+    filtered = id;
+  } else {
+    self.b.filterByParty();
+    self.h.filterByParty();
+    filtered = undefined;
+  }
+});
+
+$('body').on('click', '#answers .legend', function (e) {
+  var id = parseInt($(e.currentTarget).attr('data-id'));
+  console.log(id);
+
+  if (filtered != id) {
+    //self.b.filterByAnswer(id);
+    self.h.filterByAnswer(id);
+    filtered = id;
+  } else {
+    //self.b.filterByAnswer();
+    self.h.filterByAnswer();
     filtered = undefined;
   }
 });

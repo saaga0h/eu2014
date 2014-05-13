@@ -9,7 +9,8 @@ h1 .handle {
 }
 
 #content {
-  width: 1140px;
+  width: 1200px;
+  /* 1194 */
   padding: 0 3px;
   margin: 0 auto;
 }
@@ -34,6 +35,7 @@ h1 .handle {
   margin-bottom: 5px;
   height: 10px;
   *zoom: 1;
+  cursor: pointer;
 }
 
 .legend:before, .legend:after {
@@ -51,9 +53,17 @@ h1 .handle {
   float: left;
 }
 
+#age rect {
+  cursor: pointer;
+}
+
 #candidates .label {
   fill: white;
   text-anchor: middle;
+}
+
+#candidates .block {
+  cursor: pointer;
 }
 
 .icon {

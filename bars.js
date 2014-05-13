@@ -14,7 +14,7 @@ function bars () {
 
     selection.each(function (data) {
 
-      width = data.length * blockWidth + (data.length - 1) * gap + 2 * margin;
+      width = data.length * blockWidth + (data.length - 1) * gap + 2 * margin + 60;
       height = 170;
 
       /*
@@ -22,6 +22,11 @@ function bars () {
           .domain([0, 100])
           .range(['#bef0bf', '#1c7ac4', '#ffa000', '#f60067']);
       */
+      // Party scale based on id's
+      var p = d3.scale.ordinal()
+                .domain([170, 171, 172, 173, 174, 176, 177, 178, 179, 180, 181, 183, 184, 185, 186])
+                .range([0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60]);
+
       var y = d3.scale.linear()
                 .domain([0, 81])
                 .range([height, 0]);
@@ -41,6 +46,9 @@ function bars () {
         .attr('width', function () {
           return blockWidth;
         })
+        .attr('data-id', function (d) {
+          return d.id;
+        })
         .attr('height', function (d) {
           return height - y(d.age ? d.age : 17);
         })
@@ -48,7 +56,7 @@ function bars () {
           return y(d.age ? d.age : 17);
         })
         .attr('x', function (d, i) {
-          return i * blockWidth + i * gap;
+          return i * blockWidth + i * gap + p(d.party);
         })
         .attr('class', function (d) {
           return 'party-' + d.party;
@@ -107,6 +115,21 @@ function bars () {
           return true;
         } else {
           false;
+        }
+      })
+      .classed('dimm', false);
+  };
+
+  chart.filterByParty = function (v) {
+    d3.selectAll('svg#age rect')
+      .classed('dimm', true)
+      .filter(function (d) {
+        if (v === d.party) {
+          return true;
+        } else if (v === undefined) {
+          return true;
+        } else {
+          return false;
         }
       })
       .classed('dimm', false);

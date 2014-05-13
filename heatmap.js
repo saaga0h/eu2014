@@ -19,6 +19,12 @@ function heatmap () {
 
     selection.each(function (data) {
 
+      // Party scale based on id's
+      //
+      var p = d3.scale.ordinal()
+                .domain([170, 171, 172, 173, 174, 176, 177, 178, 179, 180, 181, 183, 184, 185, 186])
+                .range([0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60]);
+
       var groupColors = ['#1c7ac4', '#ffa000', '#f60067'];
       var categories = d3.scale.quantile()
           .domain([0, 2])
@@ -29,7 +35,7 @@ function heatmap () {
           .domain([0, 1, 2, 3, 4])
           .range(answerColors);
 
-      width = data.length * blockWidth + (data.length - 1) * gap + 2 * margin;
+      width = data.length * blockWidth + (data.length - 1) * gap + 2 * margin + 60;
       height = 30 * blockHeight + 29 * gap + 2 * margin;
 
       var svg = d3.select(this)
@@ -105,7 +111,7 @@ function heatmap () {
                             .attr('data-q-id', function (d) {
                               return Object.keys(d.question)[0];
                             })
-                            .attr('data-p-id', function (d) {
+                            .attr('data-id', function (d) {
                               return d.id;
                             })
                             .attr('height', function () {
@@ -118,7 +124,7 @@ function heatmap () {
                               return d.y * blockHeight + d.y * gap;
                             })
                             .attr('x', function (d, i) {
-                              return d.x * blockWidth + d.x * gap;
+                              return d.x * blockWidth + d.x * gap + p(d.party);
                             })
                             .attr('rx', function () {
                               return cornerRadius;
@@ -232,6 +238,36 @@ function heatmap () {
           return true;
         } else {
           false;
+        }
+      })
+      .classed('dimm', false);
+  };
+
+  chart.filterByParty = function (v) {
+    d3.selectAll('svg#candidates .block')
+      .classed('dimm', true)
+      .filter(function (d) {
+        if (v === d.party) {
+          return true;
+        } else if (v === undefined) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+      .classed('dimm', false);
+  };
+
+  chart.filterByAnswer = function (v) {
+    d3.selectAll('svg#candidates .block')
+      .classed('dimm', true)
+      .filter(function (d) {
+        if (d.answer == v) {
+          return true;
+        } else if (v === undefined) {
+          return true;
+        } else {
+          return false;
         }
       })
       .classed('dimm', false);
