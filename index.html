@@ -15,6 +15,7 @@
     <script src="thenby.js" type="text/javascript"></script>
     <script src="legend.js" type="text/javascript"></script>
     <script src="bars.js" type="text/javascript"></script>
+    <script src="vbars.js" type="text/javascript"></script>
     <script src="heatmap.js" type="text/javascript"></script>
 </head>
 
@@ -35,15 +36,9 @@
             <option value="65..130">&gt; 65</option>
           </select>
         </label>
-        <label>Sukupuoli
-          <select id="s">
-            <option selected="selected">Kaikki</option>
-            <option value="F">Naiset</option>
-            <option value="M">Miehet</option>
-            <option value="">Ei tiedossa</option>
-          </select>
-        </label>
       </div>
+      <h2>Sukupuolijakauma</h2>
+      <div id="genders"></div>
       <h2>Puolueet järjestettynä ikäjakaumittain</h2>
       <div id="parties"></div>
       <svg id="age" />

@@ -53,6 +53,13 @@ h1 .handle {
   float: left;
 }
 
+#genders .bar {
+  height: 10px;
+  margin-bottom: 4px;
+  background: slategray;
+  cursor: pointer;
+}
+
 #age rect {
   cursor: pointer;
 }
@@ -98,7 +105,7 @@ svg rect {
 }
 
 .dimm {
-  opacity: 0.05;
+  opacity: 0.2;
 }
 
 .answer-0 {

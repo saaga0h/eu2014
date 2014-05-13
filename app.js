@@ -86,6 +86,9 @@ d3.select('#answers').datum(answers).call(l.prefixer('answer-'));
 // Age distribution
 var b = bars().parties(parties);
 
+// Genders
+var v = vbars();
+
 //d3.tsv('candidates.tsv', function (data) {
 
   //d3.select('svg#age').datum(data).call(b);
@@ -145,14 +148,28 @@ d3.tsv('candidates.tsv', function (res) {
   d3.select('svg#age').datum(data).call(b);
 
   // Filter genders
-  var genders = { F: 0, M: 0, X: 0};
+  var genders = [
+    { id: 'F',
+      count: 0 },
+    { id: 'M',
+      count: 0 },
+    { id: '',
+      count: 0}
+  ];
 
-  data.map(function (v) {
-    if (v.gender === 'F' || v.gender === 'M')
-      genders[v.gender] = genders[v.gender] + 1;
-    else
-      genders['X'] = genders['X'] + 1;
-  });
+  genders[0]['count'] = data.filter(function (v) {
+    return v.gender === 'F';
+  }).length;
+
+  genders[1]['count'] = data.filter(function (v) {
+    return v.gender === 'M';
+  }).length;
+
+  genders[2]['count'] = data.filter(function (v) {
+    return v.gender === '';
+  }).length;
+
+  d3.select('#genders').datum(genders).call(v);
 
   console.log(genders);
 });
@@ -204,14 +221,27 @@ $('body').on('click', '#answers .legend', function (e) {
   }
 });
 
+$('body').on('click', '#genders .bar', function (e) {
+  var id = $(e.currentTarget).attr('data-id');
+
+  if (filtered != id) {
+    //self.b.filterByAnswer(id);
+    self.v.filterByGender(id);
+    self.h.filterByGender(id);
+    self.b.filterByGender(id);
+    filtered = id;
+  } else {
+    //self.b.filterByAnswer();
+    self.v.filterByGender();
+    self.h.filterByGender();
+    self.b.filterByGender();
+    filtered = undefined;
+  }
+});
+
 $('body').on('change', 'select#a', function (e) {
   var v = $(e.target).val().split('..').map(function (v) { return parseInt(v); });
   self.h.filterByAge(v[0], v[1]);
   self.b.filterByAge(v[0], v[1]);
 });
 
-$('body').on('change', 'select#s', function (e) {
-  var v = $(e.target).val();
-  self.h.filterByGender(v);
-  self.b.filterByGender(v);
-});
