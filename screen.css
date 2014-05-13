@@ -21,10 +21,14 @@ h1 .handle {
 }
 
 #answers {
-/*  -webkit-column-count: 5;
+  width: 45%;
+  -webkit-column-count: 5;
   -moz-column-count: 5;
   -ms-column-count: 5;
-*/}
+  -webkit-column-gap: 0;
+  -moz-column-gap: 0;
+  -ms-column-gap: 0;
+}
 
 .legend {
   margin-bottom: 5px;
@@ -45,6 +49,11 @@ h1 .handle {
   font-size: 9px;
   line-height: 10px;
   float: left;
+}
+
+#candidates .label {
+  fill: white;
+  text-anchor: middle;
 }
 
 .icon {

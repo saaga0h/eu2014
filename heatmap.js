@@ -35,30 +35,46 @@ function heatmap () {
                   .attr('width', width)
                   .attr('height', height);
 
-      svg.append('g')
-        .attr('class', 'groups')
-        .attr('transform', 'translate(2,10)')
-        .selectAll('.group')
-        .data(['Arvot', 'Talous', 'Valta'])
-        .enter()
-        .append('rect')
-        .attr('class', function (d) {
-          return d.toLowerCase();
-        })
-        .attr('width', 5)
-        .attr('height', function (d, i) {
-          return 10 * blockHeight + 9 * gap;
-        })
-        .attr('x', 0)
-        .attr('y', function (d, i) {
-          return i * (10 * blockHeight + 10 * gap);
-        })
-        .attr('rx', 5)
-        .attr('ry', 5);
+      var groups = svg.append('g')
+                      .attr('class', 'groups')
+                      .attr('transform', 'translate(2,10)');
 
-      var g = svg.append('g')
-                .attr('class', 'matrix')
-                .attr('transform', 'translate(' + margin + ', ' + margin + ')');
+      groups.selectAll('.group')
+            .data(['Arvot', 'Talous', 'Valta'])
+            .enter()
+            .append('rect')
+            .attr('class', function (d) {
+              return d.toLowerCase();
+            })
+            .attr('width', 5)
+            .attr('height', function (d, i) {
+              return 10 * blockHeight + 9 * gap;
+            })
+            .attr('x', 0)
+            .attr('y', function (d, i) {
+              return i * (10 * blockHeight + 10 * gap);
+            })
+            .attr('rx', 5)
+            .attr('ry', 5);
+
+       groups.selectAll('.label')
+             .data(['Arvot', 'Talous', 'Valta'])
+             .enter()
+             .append('g')
+             .attr('transform', function (d, i) {
+               var c = (5 * blockHeight) + i * (10 * blockHeight + 10 * gap)
+               return 'translate(0, ' + c + ')';
+             })
+             .classed('label', true)
+             .append('text')
+             .text(function (d) {
+               return d;
+             })
+             .attr('transform', 'rotate(90)');
+
+      var matrix = svg.append('g')
+                      .attr('class', 'matrix')
+                      .attr('transform', 'translate(' + margin + ', ' + margin + ')');
 
       // map answers
       var answers = [];
@@ -78,7 +94,7 @@ function heatmap () {
         }
       });
 
-      g.selectAll('.block').data(answers)
+      matrix.selectAll('.block').data(answers)
                             .enter()
                             .append('rect')
                             .attr('class', 'block')

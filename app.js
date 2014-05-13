@@ -36,11 +36,11 @@ var answers = [
   { id: 0,
     name:'Täysin samaa mieltä' },
   { id: 1,
-    name: '' },
+    name: 'Samaa mieltä' },
   { id: 2,
     name: 'Ohita'},
   { id: 3,
-    name: '' },
+    name: 'Eri mieltä' },
   { id: 4,
     name: 'Täysin eri mieltä' }
 ];
