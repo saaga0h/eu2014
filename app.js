@@ -47,35 +47,50 @@ var answers = [
 
 var parties = [
   { id: 170,
-    name: 'Itsenäisyyspuolue' },
+    name: 'Itsenäisyyspuolue',
+    order: 11 },
   { id:171,
-    name: 'KD' },
+    name: 'Suomen Kristillisdemokraatit',
+    order: 13 },
   { id: 172,
-    name: 'Suomen Keskusta' },
+    name: 'Suomen Keskusta',
+    order: 12 },
   { id: 173,
-    name: 'Kansallinen Kokoomus' },
+    name: 'Kansallinen Kokoomus',
+    order: 14 },
   { id: 174,
-    name: 'Köyhien Asialla' },
+    name: 'Köyhien Asialla',
+    order: 10 },
   { id: 176,
-    name: 'Muutos 2011' },
+    name: 'Muutos 2011',
+    order: 4 },
   { id: 177,
-    name: 'Perussuomalaiset' },
+    name: 'Perussuomalaiset',
+    order: 6 },
   { id: 178,
-     name: 'Piraattipuolue' },
+     name: 'Piraattipuolue',
+     order: 9 },
   { id: 179,
-    name: 'Suomen Sosialidemokraattinen Puolue' },
+    name: 'Suomen Sosialidemokraattinen Puolue',
+    order: 3 },
   { id: 180,
-    name: 'Ruotsalainen kansanpuolue' },
+    name: 'Ruotsalainen kansanpuolue',
+    order: 15 },
   { id: 181,
-    name: 'Suomen Kommunistinen Puolue' },
+    name: 'Suomen Kommunistinen Puolue',
+    order: 0 },
   { id: 183,
-    name: 'Vasemmistoliitto' },
+    name: 'Vasemmistoliitto',
+    order: 1 },
   { id: 184,
-    name: 'Vihreä liitto'},
+    name: 'Vihreä liitto',
+    order: 5 },
   { id: 185,
-    name: 'Sinivalkoinen Rintama'},
+    name: 'Sinivalkoinen Rintama',
+    order: 8 },
   { id: 186,
-    name: 'Kristiina Ilmarinen valitsijayhdistys'}
+    name: 'Kristiina Ilmarinen valitsijayhdistys',
+    order: 7 }
 ];
 
 var l = legend();
@@ -105,6 +120,12 @@ var f = function (a, b) {
   self.b.filterByAge(a, b);
   self.h.filterByAge(a, b);
 }
+
+var findPartyById = function (partyId) {
+  return parties.filter(function (v) {
+    return v.id === partyId;
+  })[0];
+};
 
 // Load and parse data for heatmap
 d3.tsv('candidates.tsv', function (res) {
@@ -137,7 +158,8 @@ d3.tsv('candidates.tsv', function (res) {
 }, function (data) {
   data.sort(
     firstBy(function (a, b) {
-      return a.party - b.party;
+      //return a.party - b.party;
+      return self.findPartyById(a.party).order - self.findPartyById(b.party).order;
     })
     .thenBy(function (a, b) {
       return a.age - b.age;
