@@ -93,6 +93,10 @@ var parties = [
     order: 7 }
 ];
 
+parties.sort(function (a, b) {
+  return a.order - b.order;
+});
+
 var l = legend();
 d3.select('#parties').datum(parties).call(l.prefixer('party-'));
 
