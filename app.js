@@ -303,7 +303,7 @@ $('body').on('click', '#agedistribution .bar', function (e) {
 
   self.v.filterByGender();
 
-  if (!filtered) {
+  if (filtered != v) {
     self.h.filterByAge(v[0], v[1]);
     self.b.filterByAge(v[0], v[1]);
     self.v.filterByAge(v[0], v[1]);
