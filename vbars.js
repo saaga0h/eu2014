@@ -27,7 +27,8 @@ function vbars () {
                   return 'margin-left: 60px; width: ' + x(d.count) + '%';
                 })
                 .html(function (d) {
-                  var g = d.id === 'F' ? 'Naiset (' + d.count + ')' : d.id === 'M' ? 'Miehet (' + d.count + ')' : 'Ei tiedossa (' + d.count + ')'
+                  //var g = d.id === 'F' ? 'Naiset (' + d.count + ')' : d.id === 'M' ? 'Miehet (' + d.count + ')' : 'Ei tiedossa (' + d.count + ')'
+                  var g = d.name + ' (' + d.count + ')';
                   return '<span style="margin-left: -60px" class="label">' + g + '</span>';
                 });
     });
@@ -52,6 +53,20 @@ function vbars () {
         }
       })
       .classed('dimm', false);
+  };
+
+  chart.filterByAge = function (a, b) {
+    d3.selectAll('#agedistribution .bar')
+      .classed('dimm', false)
+      .filter(function (d) {
+        if (a == undefined) {
+          return false;
+        } else {
+          var age = d.id.split('-').map(function (v) { return parseInt(v) });
+          return age[0] < a || age[1] > b;
+        }
+      })
+      .classed('dimm', true);
   };
 
   return chart;

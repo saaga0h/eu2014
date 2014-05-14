@@ -147,14 +147,17 @@ d3.tsv('candidates.tsv', function (res) {
   d3.select('svg#candidates').datum(data).call(h);
   d3.select('svg#age').datum(data).call(b);
 
-  // Filter genders
+  // Genders
   var genders = [
     { id: 'F',
-      count: 0 },
+      count: 0,
+      name: 'Naiset' },
     { id: 'M',
-      count: 0 },
+      count: 0,
+      name: 'Miehet' },
     { id: '',
-      count: 0}
+      count: 0,
+      name: 'Ei tiedossa'}
   ];
 
   genders[0]['count'] = data.filter(function (v) {
@@ -171,7 +174,54 @@ d3.tsv('candidates.tsv', function (res) {
 
   d3.select('#genders').datum(genders).call(v);
 
-  console.log(genders);
+  // Age
+  var age = [
+    { id: '0-30',
+      count: 0,
+      name: 'alle 30'
+    },
+    { id: '30-39',
+      count: 0,
+      name: '30 - 39'
+    },
+    {
+      id: '40-55',
+      count: 0,
+      name: '40 - 55'
+    },
+    {
+      id: '56-65',
+      count: 0,
+      name: '56 - 65'
+    },
+    {
+      id: '66-150',
+      count: 0,
+      name: 'yli 65'
+    }
+  ]
+
+  age[0].count = data.filter(function (v) {
+    return v.age < 30;
+  }).length;
+
+  age[1].count = data.filter(function (v) {
+    return v.age >= 30 && v.age <= 39;
+  }).length;
+
+  age[2].count = data.filter(function (v) {
+    return v.age >= 40 && v.age <= 55;
+  }).length;
+
+  age[3].count = data.filter(function (v) {
+    return v.age >= 56 && v.age <= 65;
+  }).length;
+
+  age[4].count = data.filter(function (v) {
+    return v.age > 65;
+  }).length;
+
+  d3.select('#agedistribution').datum(age).call(v);
 });
 
 
@@ -179,7 +229,10 @@ var filtered;
 
 $('body').on('click', 'svg#candidates rect, svg#age rect', function (e) {
   var id = parseInt($(e.currentTarget).attr('data-id'));
-  console.log(id);
+
+  self.v.filterByGender();
+  self.v.filterByAge(0, 150);
+
   if (filtered != id) {
     self.b.filterById(id);
     self.h.filterById(id);
@@ -193,7 +246,9 @@ $('body').on('click', 'svg#candidates rect, svg#age rect', function (e) {
 
 $('body').on('click', '#parties .legend', function (e) {
   var id = parseInt($(e.currentTarget).attr('data-id'));
-  console.log(id);
+
+  self.v.filterByGender();
+  self.v.filterByAge(0, 150);
 
   if (filtered != id) {
     self.b.filterByParty(id);
@@ -208,7 +263,9 @@ $('body').on('click', '#parties .legend', function (e) {
 
 $('body').on('click', '#answers .legend', function (e) {
   var id = parseInt($(e.currentTarget).attr('data-id'));
-  console.log(id);
+
+  self.v.filterByGender();
+  self.v.filterByAge(0, 150);
 
   if (filtered != id) {
     //self.b.filterByAnswer(id);
@@ -223,6 +280,8 @@ $('body').on('click', '#answers .legend', function (e) {
 
 $('body').on('click', '#genders .bar', function (e) {
   var id = $(e.currentTarget).attr('data-id');
+
+  self.v.filterByAge(0, 150);
 
   if (filtered != id) {
     //self.b.filterByAnswer(id);
@@ -239,9 +298,21 @@ $('body').on('click', '#genders .bar', function (e) {
   }
 });
 
-$('body').on('change', 'select#a', function (e) {
-  var v = $(e.target).val().split('..').map(function (v) { return parseInt(v); });
-  self.h.filterByAge(v[0], v[1]);
-  self.b.filterByAge(v[0], v[1]);
+$('body').on('click', '#agedistribution .bar', function (e) {
+  var v = $(e.target).attr('data-id').split('-').map(function (v) { return parseInt(v); });
+
+  self.v.filterByGender();
+
+  if (!filtered) {
+    self.h.filterByAge(v[0], v[1]);
+    self.b.filterByAge(v[0], v[1]);
+    self.v.filterByAge(v[0], v[1]);
+    filtered = v;
+  } else {
+    self.h.filterByAge(0, 150);
+    self.b.filterByAge(0, 150);
+    self.v.filterByAge(0, 150);
+    filtered = undefined;
+  }
 });
 

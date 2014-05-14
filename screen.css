@@ -53,10 +53,17 @@ h1 .handle {
   float: left;
 }
 
+#agedistribution .bar {
+  height: 10px;
+  margin-bottom: 4px;
+  background: #0066b1;
+  cursor: pointer;
+}
+
 #genders .bar {
   height: 10px;
   margin-bottom: 4px;
-  background: slategray;
+  background: #582e91;
   cursor: pointer;
 }
 
