@@ -38,6 +38,17 @@ h1 .handle {
   cursor: pointer;
 }
 
+.legend .icon {
+  margin: 2px;
+}
+
+.selected .icon {
+  /* border: 1px solid black; */
+  /*box-shadow: 0px 0px 0px 1px black;*/
+  /* box-shadow: inset 0px 0px 0px 1px white; */
+  /* box-sizing: border-box; */
+}
+
 .legend:before, .legend:after {
   content: '';
   display: table;
@@ -49,7 +60,7 @@ h1 .handle {
 
 .label {
   font-size: 9px;
-  line-height: 10px;
+  line-height: 12px;
   float: left;
 }
 

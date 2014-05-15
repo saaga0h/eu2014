@@ -3,11 +3,14 @@
 function vbars () {
 
   var prefixer = '';
+  var container;
+  var selector = '.bar';
+  var id;
 
   function chart (selection) {
 
     selection.each(function (data) {
-      var container = d3.select(this);
+      container = d3.select(this);
 
       var x = d3.scale.linear()
                 .domain([0, d3.max(data, function (v) {
@@ -15,13 +18,13 @@ function vbars () {
                 })])
                 .range([0, 80]);
 
-      container.selectAll('.bar')
+      container.selectAll(selector)
                 .data(data)
                 .enter()
                 .append('div')
                 .classed('bar', true)
-                .attr('data-id', function (d) {
-                  return d.id;
+                .attr('data', function (d) {
+                  return d[id];
                 })
                 .attr('style', function (d) {
                   return 'margin-left: 60px; width: ' + x(d.count) + '%';
@@ -34,37 +37,60 @@ function vbars () {
     });
   }
 
+  chart.container = function (v) {
+    if (!arguments.length) return container;
+    container = v;
+    return chart;
+  };
+
+  chart.selector = function (v) {
+    if (!arguments.length) return selector;
+    selector = v;
+    return chart;
+  };
+
+  chart.id = function (v) {
+    if (!arguments.length) return id;
+    id = v;
+    return chart;
+  };
+
   chart.prefixer = function (v) {
     if (!arguments.length) return prefixer;
     prefixer = v;
     return chart;
   };
 
-  chart.filterByGender = function (v) {
-    d3.selectAll('#genders .bar')
-      .classed('dimm', true)
-      .filter(function (d) {
-        if (v === undefined) {
-          return true;
-        } else if (v === d.id) {
-          return true;
-        } else {
-          false;
-        }
-      })
-      .classed('dimm', false);
-  };
+  chart.filter = function (filters) {
+    var f = function (data, values, type) {
+      if (type !== 'age')
+        return values.indexOf(data) !== -1 ? true : false;
+      else
+        return (values[0] <= data && data <= values[1]);
+    };
 
-  chart.filterByAge = function (a, b) {
-    d3.selectAll('#agedistribution .bar')
+    chart.container().selectAll(chart.selector())
+      // find once that don't match existing filters
+      // Filter always have value array and type
       .classed('dimm', false)
-      .filter(function (d) {
-        if (a == undefined) {
+      .filter(function (d) {
+        // if data doesn't have the property, no filtering
+        if (filters.filter(function (v) {
+          return d.hasOwnProperty(v.type);
+        }).length === 0)
           return false;
-        } else {
-          var age = d.id.split('-').map(function (v) { return parseInt(v) });
-          return age[0] < a || age[1] > b;
+
+        if (!filters || filters.length === 0)
+          return false;
+
+        for (var i=0; i < filters.length; i++) {
+          var filter = filters[i];
+
+          if (d.hasOwnProperty(filter.type) && f(d[filter.type], filter.values, filter.type))
+            return false;
         }
+
+        return true;
       })
       .classed('dimm', true);
   };

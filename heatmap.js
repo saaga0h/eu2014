@@ -15,6 +15,10 @@ function heatmap () {
   var questions = [];
   var parties = [];
 
+  var container;
+  var selector = '.block';
+  var id;
+
   function chart (selection) {
 
     selection.each(function (data) {
@@ -38,11 +42,11 @@ function heatmap () {
       width = data.length * blockWidth + (data.length - 1) * gap + 2 * margin + 60;
       height = 30 * blockHeight + 29 * gap + 2 * margin;
 
-      var svg = d3.select(this)
+      container = d3.select(this)
                   .attr('width', width)
                   .attr('height', height);
 
-      var groups = svg.append('g')
+      var groups = container.append('g')
                       .attr('class', 'groups')
                       .attr('transform', 'translate(2,10)');
 
@@ -79,7 +83,7 @@ function heatmap () {
              })
              .attr('transform', 'rotate(90)');
 
-      var matrix = svg.append('g')
+      var matrix = container.append('g')
                       .attr('class', 'matrix')
                       .attr('transform', 'translate(' + margin + ', ' + margin + ')');
 
@@ -92,19 +96,19 @@ function heatmap () {
           answers.push({  y: j,
                           x: i,
                           question: questions[j],
-                          answer: v.answers[j],
+                          answer: parseInt(v.answers[j]),
                           comment: v.comments[j],
                           age: v.age,
                           id: v.id,
                           person: v.person,
-                          party: v.party,
+                          partyId: v.partyId,
                           gender: v.gender,
                           candidateId: v.candidateId
                         });
         }
       });
 
-      matrix.selectAll('.block').data(answers)
+      matrix.selectAll(selector).data(answers)
                             .enter()
                             .append('rect')
                             .attr('class', 'block')
@@ -124,7 +128,7 @@ function heatmap () {
                               return d.y * blockHeight + d.y * gap;
                             })
                             .attr('x', function (d, i) {
-                              return d.x * blockWidth + d.x * gap + p(d.party);
+                              return d.x * blockWidth + d.x * gap + p(d.partyId);
                             })
                             .attr('rx', function () {
                               return cornerRadius;
@@ -163,7 +167,7 @@ function heatmap () {
         title: function() {
           var d = this.__data__;//, c = colors(d.i);
           var p = parties.filter(function (v) {
-            return v.id === d.party;
+            return v.partyId === d.partyId;
           })[0];
           return '<strong>' + d.question[Object.keys(d.question)[0]] + '</strong><br><q>' + (d.comment != '' ? d.comment : 'Ei kommentia') + '</q><br>- ' + d.person + ' (' + p.name + ')';
         }
@@ -171,6 +175,24 @@ function heatmap () {
     });
 
   }
+
+  chart.container = function (v) {
+    if (!arguments.length) return container;
+    container = v;
+    return chart;
+  };
+
+  chart.selector = function (v) {
+    if (!arguments.length) return selector;
+    selector = v;
+    return chart;
+  };
+
+  chart.id = function (v) {
+    if (!arguments.length) return id;
+    id = v;
+    return chart;
+  };
 
   chart.filterByAge = function (a, b) {
     d3.selectAll('svg#candidates .block')
@@ -247,7 +269,7 @@ function heatmap () {
     d3.selectAll('svg#candidates .block')
       .classed('dimm', true)
       .filter(function (d) {
-        if (v === d.party) {
+        if (v === d.partyId) {
           return true;
         } else if (v === undefined) {
           return true;
@@ -271,6 +293,57 @@ function heatmap () {
         }
       })
       .classed('dimm', false);
+  };
+
+  chart.filter = function (filters) {
+    var f = function (data, values, type) {
+      if (type !== 'age')
+        return values.indexOf(data) !== -1 ? true : false;
+      else
+        return (values[0] <= data && data <= values[1]);
+    };
+
+    chart.container().selectAll(chart.selector())
+      // find once that don't match existing filters
+      // Filter always have value array and type
+      .classed('dimm', false)
+      .filter(function (d) {
+        // if data doesn't have the property, no filtering
+        if (filters.filter(function (v) {
+          return d.hasOwnProperty(v.type);
+        }).length === 0)
+          return false;
+
+        if (!filters || filters.length === 0)
+          return false;
+
+        var _f = [];
+
+        for (var i=0; i < filters.length; i++) {
+          var filter = filters[i];
+
+          if (d.hasOwnProperty(filter.type) && f(d[filter.type], filter.values, filter.type))
+            _f.push({ type: filter.type, value: false });
+          else
+            _f.push({ type: filter.type, value: true });
+        }
+
+        // reduce to unique values
+        var _r = {};
+
+        for (var i=0; i < _f.length; i++) {
+          //
+          if (_r[_f[i].type] && _f[i].value === false)
+            _r[_f[i].type] = false;
+          else if (_r[_f[i].type] == undefined)
+            _r[_f[i].type] = _f[i].value;
+        }
+
+        return Object.keys(_r).map(function (k) {
+          return _r[k];
+        }).indexOf(true) > -1 ? true : false;
+      })
+      .classed('dimm', true);
   };
 
   chart.parties = function (v) {

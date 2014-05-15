@@ -1,4 +1,36 @@
 'use strict';
+/*
+ * Filtering logic?
+ *
+ * { type: 'gender', values: ['F', 'M'] }
+ * Should age always be range
+ * { type: 'age', values: [0, 30] }
+ * { type: 'party', values: [179, 183, 186] }
+ * { type: 'candidate', values: [239, 80, 94] }
+ * { type: 'opinion', values: [0, 2, 4] }
+ * { type: 'question', values: ['q5779', 'q5780'] }
+ */
+
+var filters = [];
+
+var updateFilter = function (type, values) {
+  var filter = filters.filter(function (v) {
+    return v.type === type && v.values.toString() === values.toString();
+  })[0];
+
+  if (!filter) {
+    filters.push({ type: type, values: values });
+  } else {
+    filters.splice(filters.indexOf(filter), 1);
+  }
+
+  // update visualisations
+  self.g.filter(filters);
+  self.v.filter(filters);
+  self.p.filter(filters);
+  self.b.filter(filters);
+  self.h.filter(filters);
+};
 
 var questions = [
   {'q5770': 'Mitä mieltä olet väitteestä: Tykkään EU:sta.'},
@@ -33,62 +65,62 @@ var questions = [
   {'q5799': 'Mitä mieltä olet väitteestä: Euroopan siirtymistä uusiutuvan energian käyttämiseen on nopeutettava, vaikka se nostaisi sähkön ja polttoaineiden hintoja.'}];
 
 var answers = [
-  { id: 0,
+  { answerId: 0,
     name:'Täysin samaa mieltä' },
-  { id: 1,
+  { answerId: 1,
     name: 'Samaa mieltä' },
-  { id: 2,
+  { answerId: 2,
     name: 'Ohita'},
-  { id: 3,
+  { answerId: 3,
     name: 'Eri mieltä' },
-  { id: 4,
+  { answerId: 4,
     name: 'Täysin eri mieltä' }
 ];
 
 var parties = [
-  { id: 170,
+  { partyId: 170,
     name: 'Itsenäisyyspuolue',
     order: 11 },
-  { id:171,
+  { partyId:171,
     name: 'Suomen Kristillisdemokraatit',
     order: 13 },
-  { id: 172,
+  { partyId: 172,
     name: 'Suomen Keskusta',
     order: 12 },
-  { id: 173,
+  { partyId: 173,
     name: 'Kansallinen Kokoomus',
     order: 14 },
-  { id: 174,
+  { partyId: 174,
     name: 'Köyhien Asialla',
     order: 10 },
-  { id: 176,
+  { partyId: 176,
     name: 'Muutos 2011',
     order: 4 },
-  { id: 177,
+  { partyId: 177,
     name: 'Perussuomalaiset',
     order: 6 },
-  { id: 178,
+  { partyId: 178,
      name: 'Piraattipuolue',
      order: 9 },
-  { id: 179,
+  { partyId: 179,
     name: 'Suomen Sosialidemokraattinen Puolue',
     order: 3 },
-  { id: 180,
+  { partyId: 180,
     name: 'Ruotsalainen kansanpuolue',
     order: 15 },
-  { id: 181,
+  { partyId: 181,
     name: 'Suomen Kommunistinen Puolue',
     order: 0 },
-  { id: 183,
+  { partyId: 183,
     name: 'Vasemmistoliitto',
     order: 1 },
-  { id: 184,
+  { partyId: 184,
     name: 'Vihreä liitto',
     order: 5 },
-  { id: 185,
+  { partyId: 185,
     name: 'Sinivalkoinen Rintama',
     order: 8 },
-  { id: 186,
+  { partyId: 186,
     name: 'Kristiina Ilmarinen valitsijayhdistys',
     order: 7 }
 ];
@@ -97,16 +129,18 @@ parties.sort(function (a, b) {
   return a.order - b.order;
 });
 
-var l = legend();
-d3.select('#parties').datum(parties).call(l.prefixer('party-'));
+var p = legend().id('party');
+var a = legend().id('answer');
 
-d3.select('#answers').datum(answers).call(l.prefixer('answer-'));
+d3.select('#parties').datum(parties).call(p);
+d3.select('#answers').datum(answers).call(a);
 
 // Age distribution
-var b = bars().parties(parties);
+var b = bars().id('party').parties(parties);
 
 // Genders
-var v = vbars();
+var g = vbars().id('gender');
+var v = vbars().id('id');
 
 //d3.tsv('candidates.tsv', function (data) {
 
@@ -127,9 +161,20 @@ var f = function (a, b) {
 
 var findPartyById = function (partyId) {
   return parties.filter(function (v) {
-    return v.id === partyId;
+    return v.partyId === partyId;
   })[0];
 };
+
+var findCandiadteWordsById = function (data, id) {
+  var candidate = data.filter(function (v) {
+    return v.id === id;
+  })[0];
+
+  // $.map(findCandiadteWordsById(_, 186), function (e,i) { x[e] = (x[e] || 0) + 1 })
+  return candidate.comments.join(' ').replace(/[^\w\säöå]/gi, '').split(' ');
+};
+
+var _;
 
 // Load and parse data for heatmap
 d3.tsv('candidates.tsv', function (res) {
@@ -143,7 +188,7 @@ d3.tsv('candidates.tsv', function (res) {
    */
   var _ = {
     id: parseInt(res['Id']),
-    party: parseInt(res['Puolue']),
+    partyId: parseInt(res['Puolue']),
     age: parseInt(res['Ikä']),
     person: res['Etunimi'] + ' ' + res['Sukunimi'],
     candidateId: res['Ehdokasnumero'],
@@ -163,7 +208,7 @@ d3.tsv('candidates.tsv', function (res) {
   data.sort(
     firstBy(function (a, b) {
       //return a.party - b.party;
-      return self.findPartyById(a.party).order - self.findPartyById(b.party).order;
+      return self.findPartyById(a.partyId).order - self.findPartyById(b.partyId).order;
     })
     .thenBy(function (a, b) {
       return a.age - b.age;
@@ -175,14 +220,17 @@ d3.tsv('candidates.tsv', function (res) {
 
   // Genders
   var genders = [
-    { id: 'F',
+    { id: 0,
       count: 0,
+      gender: 'F',
       name: 'Naiset' },
-    { id: 'M',
+    { id: 1,
       count: 0,
+      gender: 'M',
       name: 'Miehet' },
-    { id: '',
+    { id: 2,
       count: 0,
+      gender: '',
       name: 'Ei tiedossa'}
   ];
 
@@ -198,31 +246,36 @@ d3.tsv('candidates.tsv', function (res) {
     return v.gender === '';
   }).length;
 
-  d3.select('#genders').datum(genders).call(v);
+  d3.select('#genders').datum(genders).call(g);
 
   // Age
   var age = [
     { id: '0-30',
       count: 0,
+      age: 15,
       name: 'alle 30'
     },
     { id: '30-39',
       count: 0,
+      age: 35,
       name: '30 - 39'
     },
     {
       id: '40-55',
       count: 0,
+      age: 45,
       name: '40 - 55'
     },
     {
       id: '56-65',
       count: 0,
+      age: 60,
       name: '56 - 65'
     },
     {
       id: '66-150',
       count: 0,
+      age: 80,
       name: 'yli 65'
     }
   ]
@@ -248,6 +301,9 @@ d3.tsv('candidates.tsv', function (res) {
   }).length;
 
   d3.select('#agedistribution').datum(age).call(v);
+
+  // for debug
+  self._ = data;
 });
 
 
@@ -271,8 +327,10 @@ $('body').on('click', 'svg#candidates rect, svg#age rect', function (e) {
 });
 
 $('body').on('click', '#parties .legend', function (e) {
-  var id = parseInt($(e.currentTarget).attr('data-id'));
-
+  var id = parseInt($(e.currentTarget).attr('data'));
+  $(e.currentTarget).toggleClass('selected');
+  self.updateFilter('partyId', [id]);
+  /*
   self.v.filterByGender();
   self.v.filterByAge(0, 150);
 
@@ -285,11 +343,14 @@ $('body').on('click', '#parties .legend', function (e) {
     self.h.filterByParty();
     filtered = undefined;
   }
+  */
 });
 
 $('body').on('click', '#answers .legend', function (e) {
-  var id = parseInt($(e.currentTarget).attr('data-id'));
-
+  var id = parseInt($(e.currentTarget).attr('data'));
+  $(e.currentTarget).toggleClass('selected');
+  self.updateFilter('answer', [id]);
+  /*
   self.v.filterByGender();
   self.v.filterByAge(0, 150);
 
@@ -302,11 +363,13 @@ $('body').on('click', '#answers .legend', function (e) {
     self.h.filterByAnswer();
     filtered = undefined;
   }
+  */
 });
 
 $('body').on('click', '#genders .bar', function (e) {
-  var id = $(e.currentTarget).attr('data-id');
-
+  var id = $(e.currentTarget).attr('data');
+  self.updateFilter('gender', [id]);
+  /*
   self.v.filterByAge(0, 150);
 
   if (filtered != id) {
@@ -322,11 +385,13 @@ $('body').on('click', '#genders .bar', function (e) {
     self.b.filterByGender();
     filtered = undefined;
   }
+  */
 });
 
 $('body').on('click', '#agedistribution .bar', function (e) {
-  var v = $(e.target).attr('data-id').split('-').map(function (v) { return parseInt(v); });
-
+  var v = $(e.target).attr('data').split('-').map(function (v) { return parseInt(v); });
+  self.updateFilter('age', [v[0], v[1]]);
+  /*
   self.v.filterByGender();
 
   if (filtered != v) {
@@ -340,5 +405,6 @@ $('body').on('click', '#agedistribution .bar', function (e) {
     self.v.filterByAge(0, 150);
     filtered = undefined;
   }
+  */
 });
 
