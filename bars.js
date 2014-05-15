@@ -114,14 +114,21 @@ function bars () {
       // Filter always have value array and type
       .classed('dimm', false)
       .filter(function (d) {
-        // if data doesn't have the property, no filtering
+
+        if (!filters || filters.length === 0)
+          return false;
+
+        // if data doesn't one of the filtering properties
+        // removed it from filters array
+        filters = filters.filter(function (v) {
+          return d.hasOwnProperty(v.type);
+        });
+        /*
         if (filters.filter(function (v) {
           return d.hasOwnProperty(v.type);
         }).length === 0)
           return false;
-
-        if (!filters || filters.length === 0)
-          return false;
+        */
 
         var _f = [];
 

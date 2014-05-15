@@ -96,7 +96,7 @@ function heatmap () {
           answers.push({  y: j,
                           x: i,
                           question: questions[j],
-                          answer: parseInt(v.answers[j]),
+                          answerId: parseInt(v.answers[j]),
                           comment: v.comments[j],
                           age: v.age,
                           id: v.id,
@@ -115,8 +115,8 @@ function heatmap () {
                             .attr('data-q-id', function (d) {
                               return Object.keys(d.question)[0];
                             })
-                            .attr('data-id', function (d) {
-                              return d.id;
+                            .attr('data', function (d) {
+                              return d.candidateId;
                             })
                             .attr('height', function () {
                               return blockHeight;
@@ -137,7 +137,7 @@ function heatmap () {
                               return cornerRadius;
                             })
                             .attr('fill', function (d) {
-                              return colors(d.answer);
+                              return colors(d.answerId);
                             });
 
       $('svg#candidates .block').tipsy({

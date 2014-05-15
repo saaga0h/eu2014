@@ -54,8 +54,15 @@ function legend () {
     var f = function (data, values, type) {
       if (type !== 'age')
         return values.indexOf(data) !== -1 ? true : false;
-      else
-        return (values[0] <= data && data <= values[1]);
+      else {
+        var _ = [];
+        for (var i=0; i < values.length; i++) {
+        // data.min < values[  ] > data.max
+          _.push(data[0] < values[i] && values[i] < data[1]);
+        }
+        return _.indexOf(true) > -1 ? true : false;
+        //(values[0] <= data && data <= values[1]);
+      }
     };
 
     chart.container().selectAll(chart.selector())
@@ -63,6 +70,11 @@ function legend () {
       // Filter always have value array and type
       .classed('dimm', false)
       .filter(function (d) {
+        if (filters.filter(function (v) {
+          return d.hasOwnProperty(v.type);
+        }).length === 0)
+          return false;
+
         if (!filters || filters.length === 0)
           return false;
 

@@ -34,6 +34,7 @@ var updateFilter = function (type, values) {
   self.g.filter(filters);
   self.v.filter(filters);
   self.p.filter(filters);
+  self.a.filter(filters);
   self.b.filter(filters);
   self.h.filter(filters);
 };
@@ -229,7 +230,7 @@ $('body').on('click', '#parties .legend', function (e) {
 $('body').on('click', '#answers .legend', function (e) {
   var id = parseInt($(e.currentTarget).attr('data'));
   $(e.currentTarget).toggleClass('selected');
-  self.updateFilter('answer', [id]);
+  self.updateFilter('answerId', [id]);
 });
 
 $('body').on('click', '#genders .bar', function (e) {
