@@ -49,8 +49,8 @@ function bars () {
         .attr('width', function () {
           return blockWidth;
         })
-        .attr('data-id', function (d) {
-          return 0;//d.id;
+        .attr('data', function (d) {
+          return d.candidateId;//d.id;
         })
         .attr('data-party-id', function (d) {
           return d.partyId;
@@ -101,7 +101,6 @@ function bars () {
     return chart;
   };
 
-  // within same type rule has to be considered as OR not AND
   chart.filter = function (filters) {
     var f = function (data, values, type) {
       if (type !== 'age')
