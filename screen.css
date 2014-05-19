@@ -186,23 +186,35 @@ rect:hover {
 }
 
 .answer-0 {
-  background: #17d71b;
+/*  background: #17d71b;
+*/
+  background: #10ad0b;
 }
 
 .answer-1 {
-  background: #bef0bf;
+/*  background: #bef0bf;
+*/
+  background: #85e112;
 }
 
 .answer-2 {
-  background: #feff8c;
+/*  background: #feff8c;
+*/
+/*  background: #d2ee15;
+*/
+  background: #757761;
 }
 
 .answer-3 {
-  background: #e08488;
+/*  background: #e08488;
+*/
+  background: #dc8115;
 }
 
 .answer-4 {
-  background: #e32932;
+/*  background: #e32932;
+*/
+  background: #da1f15;
 }
 /* Itsenäisyyspuolue */
 .party-170 {

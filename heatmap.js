@@ -49,7 +49,7 @@ function heatmap () {
           .domain([0, 2])
           .range(groupColors);
 
-      var answerColors = ['#17d71b', '#bef0bf', '#ebee19', '#e08488', '#e32932'];
+      var answerColors = ['#10ad0b', '#85e112', '#757761', '#dc8115', '#da1f15'];
       var colors = d3.scale.ordinal()
           .domain([0, 1, 2, 3, 4])
           .range(answerColors);
