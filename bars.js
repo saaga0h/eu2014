@@ -11,28 +11,28 @@ function bars () {
   var parties = [];
   var container;
   var selector = 'rect';
-  var id;
+  var scale = d3.scale.ordinal();
+
+  //var scale = d3.scale.ordinal();
 
   function chart (selection) {
 
     selection.each(function (data) {
 
-      width = data.length * blockWidth + (data.length - 1) * gap + 2 * margin + 60;
+      width = 1140; //data.length * blockWidth + (data.length - 1) * gap + 2 * margin + 60;
       height = 170;
-
-      /*
-      var color = d3.scale.quantile()
-          .domain([0, 100])
-          .range(['#bef0bf', '#1c7ac4', '#ffa000', '#f60067']);
-      */
-      // Party scale based on id's
-      var p = d3.scale.ordinal()
-                .domain([181, 183, 179, 176, 184, 177, 186, 185, 178, 174, 170, 172, 171, 173, 180])
-                .range([0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60]);
 
       var y = d3.scale.linear()
                 .domain([0, 81])
                 .range([height, 0]);
+      //
+      var ids = data.map(function (v) {
+        return +v.id;
+      })
+      scale.domain(ids)
+           .rangeBands([0, width], .2, 0);
+      // no groups
+      //  - 60
 
       var _width = (width - gap * (data.length - 1)) / data.length;
 
@@ -40,14 +40,14 @@ function bars () {
                   .attr('height', height)
                   .attr('width', width);
 
-      var g = container.append('g').attr('transform', 'translate(' + margin + ', 0)');
+      var g = container.append('g').attr('transform', 'translate(' + 0 + ', 0)');
 
       g.selectAll(selector)
         .data(data)
         .enter()
         .append('rect')
         .attr('width', function () {
-          return blockWidth;
+          return scale.rangeBand();
         })
         .attr('data', function (d) {
           return d.candidateId;//d.id;
@@ -62,7 +62,7 @@ function bars () {
           return y(d.age ? d.age : 17);
         })
         .attr('x', function (d, i) {
-          return i * blockWidth + i * gap + p(d.partyId);
+          return scale(d.id);// + App.n0.eu.Group.getGroupBy()(d.partyId);
         })
         .attr('class', function (d) {
           return 'party-' + d.partyId;
@@ -77,10 +77,42 @@ function bars () {
             return v.partyId === d.partyId;
           })[0];
           //p = p[0][Object.keys(p[0])];
-          return '<strong>' + p.name + '</strong><br><span>' + d.person + '</span> <em>(' + (d.age ? d.age + ' vuotta' : 'Ei tiedossa') + ')</em>';
+          return '<strong>' + p.name + '</strong><br><span>' + d.person + '</span> <em>(' + (d.age ? d.age + ' vuotta' : 'Ei vastausta') + ')</em>';
         }
       });
     });
+  };
+
+  chart.scale = function () {
+    return scale;
+  };
+
+  chart.sort = function (type, reset) {
+    // Clone data array, otherwise sort will destroy the order
+    var s = App.n0.eu.Sort.getSortBy(reset ? undefined : type);
+
+    // how to figure out which way to sort items
+    //
+    //var g0 =  App.n0.eu.Group.getGroupBy(type);
+
+    var s0 = Array.apply(null, container.datum()).sort(s);
+    var d0 = s0.map(function (d) {
+      return +d.id;
+    });
+
+    var x0 = scale.copy();
+    x0.domain(d0);
+
+    var transition = chart.container().transition().duration(250);
+    var delay = function (d, i) {
+      return i * 5;
+    };
+
+    transition.selectAll(chart.selector())
+              .delay(delay)
+              .attr('x', function (d, i) {
+                return x0(d.id);// + g0(d[type]);
+              });
   };
 
   chart.container = function (v) {
@@ -152,69 +184,16 @@ function bars () {
             _r[_f[i].type] = _f[i].value;
         }
 
-        return Object.keys(_r).map(function (k) {
+        var _ = Object.keys(_r).map(function (k) {
           return _r[k];
         }).indexOf(true) > -1 ? true : false;
+
+        d.dimm = _ ? 1 : 0;
+        return _;
       })
       .classed('dimm', true);
-  };
 
-  chart.filterByAge = function (a, b) {
-    d3.selectAll('svg#age rect')
-      .classed('dimm', false)
-      .filter(function (d) {
-        if (a == undefined) {
-          return false;
-        } else {
-          return d.age < a || d.age > b;
-        }
-      })
-      .classed('dimm', true);
-  };
-
-  chart.filterById = function (i) {
-    d3.selectAll('svg#age rect')
-      .classed('dimm', true)
-      .filter(function (d) {
-        if (Array.isArray(i)) {
-          return i.indexOf(d.id) > -1 ? true : false
-        } else if (i != undefined){
-          return d.id == i;
-        } else {
-          return true;
-        }
-      })
-      .classed('dimm', false);
-  };
-
-  chart.filterByGender = function (v) {
-    d3.selectAll('svg#age rect')
-      .classed('dimm', true)
-      .filter(function (d) {
-        if (v === undefined) {
-          return true;
-        } else if (v === d.gender) {
-          return true;
-        } else {
-          false;
-        }
-      })
-      .classed('dimm', false);
-  };
-
-  chart.filterByParty = function (v) {
-    d3.selectAll('svg#age rect')
-      .classed('dimm', true)
-      .filter(function (d) {
-        if (v === d.partyId) {
-          return true;
-        } else if (v === undefined) {
-          return true;
-        } else {
-          return false;
-        }
-      })
-      .classed('dimm', false);
+    return chart;
   };
 
   chart.parties = function (v) {

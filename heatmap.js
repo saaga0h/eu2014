@@ -2,7 +2,7 @@
 
 function heatmap () {
 
-  var width = 1024;
+  var width = 1160;
   var height = 800;
   var cornerRadius = 2;
   var blockSize = 30;
@@ -18,6 +18,7 @@ function heatmap () {
   var container;
   var selector = '.block';
   var id;
+  var scale = d3.scale.ordinal();
 
   function chart (selection) {
 
@@ -29,6 +30,20 @@ function heatmap () {
                 .domain([181, 183, 179, 176, 184, 177, 186, 185, 178, 174, 170, 172, 171, 173, 180])
                 .range([0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60]);
 
+      height = 30 * blockHeight + 29 * gap + 2 * margin;
+
+      var ids = data.map(function (v) {
+        return +v.id;
+      });
+      scale.domain(ids)
+           .rangeBands([0, width - (20)], .2, 0);
+      // no groups
+      // - 60
+
+      var y = d3.scale.ordinal()
+                      .domain(ids)
+                      .rangeBands([0, height], .2, 0);
+
       var groupColors = ['#1c7ac4', '#ffa000', '#f60067'];
       var categories = d3.scale.quantile()
           .domain([0, 2])
@@ -39,8 +54,7 @@ function heatmap () {
           .domain([0, 1, 2, 3, 4])
           .range(answerColors);
 
-      width = data.length * blockWidth + (data.length - 1) * gap + 2 * margin + 60;
-      height = 30 * blockHeight + 29 * gap + 2 * margin;
+      //width = data.length * blockWidth + (data.length - 1) * gap + 2 * margin + 60;
 
       container = d3.select(this)
                   .attr('width', width)
@@ -48,7 +62,7 @@ function heatmap () {
 
       var groups = container.append('g')
                       .attr('class', 'groups')
-                      .attr('transform', 'translate(2,10)');
+                      .attr('transform', 'translate(0,10)');
 
       groups.selectAll('.group')
             .data(['Arvot', 'Talous', 'Valta'])
@@ -57,7 +71,7 @@ function heatmap () {
             .attr('class', function (d) {
               return d.toLowerCase();
             })
-            .attr('width', 5)
+            .attr('width', 15)
             .attr('height', function (d, i) {
               return 10 * blockHeight + 9 * gap;
             })
@@ -74,7 +88,7 @@ function heatmap () {
              .append('g')
              .attr('transform', function (d, i) {
                var c = (5 * blockHeight) + i * (10 * blockHeight + 10 * gap)
-               return 'translate(0, ' + c + ')';
+               return 'translate(2, ' + c + ')';
              })
              .classed('label', true)
              .append('text')
@@ -85,7 +99,7 @@ function heatmap () {
 
       var matrix = container.append('g')
                       .attr('class', 'matrix')
-                      .attr('transform', 'translate(' + margin + ', ' + margin + ')');
+                      .attr('transform', 'translate(' + 20 + ', ' + 10 + ')');
 
       // map answers
       var answers = [];
@@ -102,6 +116,7 @@ function heatmap () {
                           id: v.id,
                           person: v.person,
                           partyId: v.partyId,
+                          partyOrder: v.partyOrder,
                           gender: v.gender,
                           candidateId: v.candidateId
                         });
@@ -122,13 +137,13 @@ function heatmap () {
                               return blockHeight;
                             })
                             .attr('width', function () {
-                              return blockWidth;
+                              return scale.rangeBand();
                             })
                             .attr('y', function (d, i) {
                               return d.y * blockHeight + d.y * gap;
                             })
                             .attr('x', function (d, i) {
-                              return d.x * blockWidth + d.x * gap + p(d.partyId);
+                              return scale(d.id);// + p(d.partyId);
                             })
                             .attr('rx', function () {
                               return cornerRadius;
@@ -194,6 +209,26 @@ function heatmap () {
     return chart;
   };
 
+  chart.sort = function (type, reset) {
+    // Clone data array, otherwise sort will destroy the order
+    var s0 = Array.apply(null, container.datum()).sort(App.n0.eu.Sort.getSortBy(reset ? undefined : type));
+    var d0 = s0.map(function (d) {
+      return +d.id;
+    });
+    var x0 = scale.copy().domain(d0);
+
+    var transition = chart.container().transition().duration(250);
+    var delay = function (d, i) {
+      return i * 0.25;
+    };
+
+    transition.selectAll(chart.selector())
+              .delay(delay)
+              .attr('x', function (d, i) {
+                return x0(d.id);// + (d.dimm ? p(d.partyId) : 0);
+              });
+  };
+
   chart.filter = function (filters) {
     var f = function (data, values, type) {
       if (type !== 'age')
@@ -238,11 +273,16 @@ function heatmap () {
             _r[_f[i].type] = _f[i].value;
         }
 
-        return Object.keys(_r).map(function (k) {
+        var _ = Object.keys(_r).map(function (k) {
           return _r[k];
         }).indexOf(true) > -1 ? true : false;
+
+        d.dimm = _ ? 1 : 0;
+        return _;
       })
       .classed('dimm', true);
+
+    return chart;
   };
 
   chart.parties = function (v) {

@@ -30,7 +30,6 @@ function vbars () {
                   return 'margin-left: 60px; width: ' + x(d.count) + '%';
                 })
                 .html(function (d) {
-                  //var g = d.id === 'F' ? 'Naiset (' + d.count + ')' : d.id === 'M' ? 'Miehet (' + d.count + ')' : 'Ei tiedossa (' + d.count + ')'
                   var g = d.name + ' (' + d.count + ')';
                   return '<span style="margin-left: -60px" class="label">' + g + '</span>';
                 });

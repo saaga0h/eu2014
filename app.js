@@ -1,3 +1,7 @@
+window.App = window.App || {}
+window.App.n0 = window.App.n0 || {}
+window.App.n0.eu = window.App.n0.eu || {}
+
 'use strict';
 /*
  * TODO
@@ -19,7 +23,9 @@
 
 var filters = [];
 
-var updateFilter = function (type, values) {
+var updateFilter = function (type, values, sorting) {
+  var reset = false;
+
   var filter = filters.filter(function (v) {
     return v.type === type && v.values.toString() === values.toString();
   })[0];
@@ -30,6 +36,9 @@ var updateFilter = function (type, values) {
     filters.splice(filters.indexOf(filter), 1);
   }
 
+  if (filters.length === 0)
+    reset = true;
+
   // update visualisations
   self.g.filter(filters);
   self.v.filter(filters);
@@ -37,6 +46,10 @@ var updateFilter = function (type, values) {
   self.a.filter(filters);
   self.b.filter(filters);
   self.h.filter(filters);
+  if (sorting) {
+    self.b.sort(type, reset);
+    self.h.sort(type, reset);
+  }
 };
 
 
@@ -97,12 +110,13 @@ d3.tsv('candidates.tsv', function (res) {
    *   id: 31 }
    */
   var _ = {
-    id: parseInt(res['Id']),
-    partyId: parseInt(res['Puolue']),
-    age: parseInt(res['Ikä']),
+    id: +res['Id'],
+    partyId: +res['Puolue'],
+    partyOrder: self.findPartyById(+res['Puolue']).order,
+    age: +res['Ikä'],
     person: res['Etunimi'] + ' ' + res['Sukunimi'],
-    candidateId: parseInt(res['Ehdokasnumero']),
-    gender: res['Sukupuoli'],
+    candidateId: +res['Ehdokasnumero'],
+    gender: res['Sukupuoli'] === '' ? 'X' : res['Sukupuoli'],
     answers: [],
     comments: []
   };
@@ -115,15 +129,7 @@ d3.tsv('candidates.tsv', function (res) {
   return _;
 
 }, function (data) {
-  data.sort(
-    firstBy(function (a, b) {
-      //return a.party - b.party;
-      return self.findPartyById(a.partyId).order - self.findPartyById(b.partyId).order;
-    })
-    .thenBy(function (a, b) {
-      return a.age - b.age;
-    })
-  );
+  data.sort(App.n0.eu.Sort.sortByDefault());
 
   d3.select('svg#candidates').datum(data).call(h);
   d3.select('svg#age').datum(data).call(b);
@@ -140,8 +146,8 @@ d3.tsv('candidates.tsv', function (res) {
       name: 'Miehet' },
     { id: 2,
       count: 0,
-      gender: '',
-      name: 'Ei tiedossa'}
+      gender: 'X',
+      name: 'Ei vastausta'}
   ];
 
   genders[0]['count'] = data.filter(function (v) {
@@ -153,7 +159,7 @@ d3.tsv('candidates.tsv', function (res) {
   }).length;
 
   genders[2]['count'] = data.filter(function (v) {
-    return v.gender === '';
+    return v.gender === 'X';
   }).length;
 
   d3.select('#genders').datum(genders).call(g);
@@ -224,7 +230,7 @@ $('body').on('click', 'svg#candidates rect, svg#age rect', function (e) {
 $('body').on('click', '#parties .legend', function (e) {
   var id = parseInt($(e.currentTarget).attr('data'));
   $(e.currentTarget).toggleClass('selected');
-  self.updateFilter('partyId', [id]);
+  self.updateFilter('partyId', [id], true);
 });
 
 $('body').on('click', '#answers .legend', function (e) {
@@ -235,12 +241,12 @@ $('body').on('click', '#answers .legend', function (e) {
 
 $('body').on('click', '#genders .bar', function (e) {
   var id = $(e.currentTarget).attr('data');
-  self.updateFilter('gender', [id]);
+  self.updateFilter('gender', [id], true);
 
 });
 
 $('body').on('click', '#agedistribution .bar', function (e) {
   var v = $(e.target).attr('data').split('-').map(function (v) { return parseInt(v); });
-  self.updateFilter('age', [v[0], v[1]]);
+  self.updateFilter('age', [v[0], v[1]], true);
 });
 

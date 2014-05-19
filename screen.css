@@ -76,10 +76,10 @@ h1 .handle {
 }
 
 .selected .icon {
-  /* border: 1px solid black; */
-  /*box-shadow: 0px 0px 0px 1px black;*/
-  /* box-shadow: inset 0px 0px 0px 1px white; */
-  /* box-sizing: border-box; */
+   border: 1px solid black;
+   /*box-shadow: 0px 0px 0px 1px black;*/
+   box-shadow: inset 0px 0px 0px 1px white;
+   box-sizing: border-box;
 }
 
 .legend:before, .legend:after {
@@ -116,6 +116,7 @@ h1 .handle {
   height: 10px;
   margin-bottom: 4px;
   background: #582e91;
+  /* background: #84bcb9; */
   cursor: pointer;
 }
 
@@ -123,8 +124,13 @@ h1 .handle {
   cursor: pointer;
 }
 
+#candidates {
+  margin-left: -20px
+}
+
 #candidates .label {
   fill: white;
+  font-size: 16px;
   text-anchor: middle;
 }
 
