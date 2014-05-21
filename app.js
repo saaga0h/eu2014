@@ -30,7 +30,7 @@ var updateFilter = function (type, values, sorting) {
     return v.type === type && v.values.toString() === values.toString();
   })[0];
 
-  if (!filter) {
+  if (!filter && type) {
     filters.push({ type: type, values: values });
   } else {
     filters.splice(filters.indexOf(filter), 1);
@@ -49,6 +49,12 @@ var updateFilter = function (type, values, sorting) {
   if (sorting) {
     self.b.sort(type, reset);
     self.h.sort(type, reset);
+  }
+
+  if (filters.length) {
+    $('#header button').attr('disabled', false);
+  } else {
+    $('#header button').attr('disabled', true);
   }
 };
 
@@ -222,7 +228,7 @@ d3.tsv('candidates.tsv', function (res) {
   self._ = data;
 });
 
-$('body').on('click', 'svg#candidates rect, svg#age rect', function (e) {
+$('body').on('click', 'svg#candidates rect:not(.dimm), svg#age rect:not(.dimm)', function (e) {
   var id = parseInt($(e.currentTarget).attr('data'));
   self.updateFilter('candidateId', [id]);
 });
@@ -246,7 +252,12 @@ $('body').on('click', '#genders .bar', function (e) {
 });
 
 $('body').on('click', '#agedistribution .bar', function (e) {
-  var v = $(e.target).attr('data').split('-').map(function (v) { return parseInt(v); });
+  var v = $(e.currentTarget).attr('data').split('-').map(function (v) { return parseInt(v); });
   self.updateFilter('age', [v[0], v[1]], true);
 });
 
+$('body').on('click', '#header button', function (e) {
+  filters = [];
+  updateFilter();
+  $('.legend').removeClass('selected');
+});

@@ -36,11 +36,83 @@ h1 .handle {
   font-size: 16px
 }
 
+p {
+  margin: 0 0 5px 0;
+}
+
+a:link {
+  color: #582e91;
+}
+
+#header {
+  /*position: fixed;*/
+  /*width: 1140px;*/
+  /*background: white;*/
+  /*top: 0;*/
+  /*box-shadow: 0px 0px 20px -2px rgba(0, 0, 0, 0.6);*/
+}
+
+#header h1 {
+  float: left;
+}
+
+#header a {
+  float: right;
+  font-size: 12px;
+}
+
+#header button {
+  float: right;
+  clear: left;
+  margin-top: -46px;
+  background: rgb(211, 35, 48);
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  color: white;
+  outline: none;
+  transition: all .35s ease-in-out;
+}
+
+#header button[disabled] {
+  background: none;
+  color: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+#header:before, #header:after {
+  content: '';
+  display: table;
+}
+
+#header:after {
+  clear: both;
+}
+
+.twitter {
+  background: url(twitter.png) no-repeat left center;
+  background-size: 25px 25px;
+  height: 30px;
+  display: block;
+  padding-left: 25px;
+  line-height: 30px;
+  margin-left: 15px;
+}
+
+.github {
+  background: url(github.png) no-repeat center center;
+  background-size: 61px 25px;
+  height: 30px;
+  width: 70px;
+  display: block;
+}
+
 #content {
-  width: 1200px;
+  width: 1140px;
   /* 1194 */
-  padding: 0 3px;
   margin: 0 auto;
+}
+
+#charts {
+  /*padding-top: 90px;*/
 }
 
 #parties {
@@ -109,6 +181,9 @@ h1 .handle {
   height: 10px;
   margin-bottom: 4px;
   background: #0066b1;
+}
+
+#agedistribution .bar {
   cursor: pointer;
 }
 
@@ -134,7 +209,7 @@ h1 .handle {
   text-anchor: middle;
 }
 
-#candidates .block {
+#candidates .block:not(.dimm) {
   cursor: pointer;
 }
 
@@ -318,4 +393,69 @@ rect:hover {
   color: rgb(16, 239, 16);
   fill: rgb(16, 239, 16);
   background: rgb(16, 239, 16);
+}
+
+/* Tooltip */
+.tooltip {
+  /*line-height: 1;*/
+  /*font-weight: bold;*/
+  font-size: 12px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.tooltip .question {
+  font-weight: bold;
+}
+
+.tooltip .comment:after, .tooltip .comment:before {
+  content: '"';
+}
+/* Creates a small triangle extender for the tooltip */
+.tooltip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Northward tooltips */
+.tooltip.n:after {
+  content: "\25BC";
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+  text-align: center;
+}
+
+/* Eastward tooltips */
+.tooltip.e:after {
+  content: "\25C0";
+  margin: -4px 0 0 0;
+  top: 50%;
+  left: -8px;
+}
+
+/* Southward tooltips */
+.tooltip.s:after {
+  content: "\25B2";
+  margin: 0 0 1px 0;
+  top: -8px;
+  left: 0;
+  text-align: center;
+}
+
+/* Westward tooltips */
+.tooltip.w:after {
+  content: "\25B6";
+  margin: -4px 0 0 -1px;
+  top: 50%;
+  left: 100%;
 }

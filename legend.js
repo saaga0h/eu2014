@@ -51,6 +51,7 @@ function legend () {
   };
 
   chart.filter = function (filters) {
+    /*
     var f = function (data, values, type) {
       if (type !== 'age')
         return values.indexOf(data) !== -1 ? true : false;
@@ -88,6 +89,7 @@ function legend () {
         return true;
       })
       .classed('dimm', true);
+    */
   };
 
   return chart;

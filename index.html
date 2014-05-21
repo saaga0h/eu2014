@@ -3,7 +3,7 @@
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=4.0, user-scalable=yes" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="format-detection" content="telephone=no" />
     <title>Eurovaalit 2014</title>
     <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400' rel='stylesheet' type='text/css'>
@@ -12,6 +12,7 @@
     <script src="jquery.js" type="text/javascript"></script>
     <script src="jquery.tipsy.js" type="text/javascript"></script>
     <script src="d3.js" charset="utf-8"></script>
+    <script src="d3.tip.js" charset="utf-8"></script>
     <script src="thenby.js" type="text/javascript"></script>
     <script src="data.js" type="text/javascript"></script>
     <script src="sort.js" type="text/javascript"></script>
@@ -23,35 +24,29 @@
 </head>
 
 <body>
+
     <div id="content">
-      <h1>
-        Eurovaalit 2014
-        <a href="https://twitter.com/mircurios" class="handle">@mircurios</a>
-      </h1>
-      <div id="filters">
-      <!--
-        <label>Ikä
-          <select id="a">
-            <option value="0..130" selected="selected">Kaikki</option>
-            <option value="0..30">&lt; 30</option>
-            <option value="30..40">30 - 40</option>
-            <option value="40..50">40 - 50</option>
-            <option value="50..65">50 - 65</option>
-            <option value="65..130">&gt; 65</option>
-          </select>
-        </label>
-      -->
+      <div id="header">
+        <h1>Eurovaalit 2014</h1>
+        <a href="https://twitter.com/mircurios" class="twitter">
+          @mircurios
+        </a>
+        <a href="https://github.com/mircurios" class="github">
+        </a>
+        <button disabled="disabled">Poista valinnat</button>
       </div>
-      <h2>Sukupuolijakauma</h2>
-      <div id="genders"></div>
-      <h2>Ikäjakauma</h2>
-      <div id="agedistribution"></div>
-      <h2>Puolueet järjestettynä ikäjakaumittain</h2>
-      <div id="parties"></div>
-      <svg id="age" />
-      <h2>Ehdokkaiden vaalikonevastaukset</h2>
-      <div id="answers"></div>
-      <svg id="candidates" />
+      <div id="charts">
+        <h2><a name="#gender" />Sukupuolijakauma</h2>
+        <div id="genders"></div>
+        <h2>Ikäjakauma</h2>
+        <div id="agedistribution"></div>
+        <h2>Puolueet järjestettynä ikäjakaumittain</h2>
+        <div id="parties"></div>
+        <svg id="age" />
+        <h2>Ehdokkaiden vaalikonevastaukset</h2>
+        <div id="answers"></div>
+        <svg id="candidates" />
+      </div>
     </div>
 
     <script src="app.js" type="text/javascript"></script>

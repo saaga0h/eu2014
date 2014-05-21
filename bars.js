@@ -69,7 +69,7 @@ function bars () {
         });
 
       $('svg#age rect').tipsy({
-        gravity: 'n',
+        gravity: $.fn.tipsy.autoWE,
         html: true,
         title: function() {
           var d = this.__data__;//, c = colors(d.i);
@@ -77,7 +77,7 @@ function bars () {
             return v.partyId === d.partyId;
           })[0];
           //p = p[0][Object.keys(p[0])];
-          return '<strong>' + p.name + '</strong><br><span>' + d.person + '</span> <em>(' + (d.age ? d.age + ' vuotta' : 'Ei vastausta') + ')</em>';
+          return '<p><strong>' + p.name + '</strong></p><p><span>' + d.person + '</span> <em>(' + (d.age ? d.age + ' vuotta' : 'Ei vastausta') + ')</em></p>';
         }
       });
     });

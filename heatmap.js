@@ -157,26 +157,36 @@ function heatmap () {
 
       $('svg#candidates .block').tipsy({
         gravity: function () {
-          var d = this.__data__;
-          var dir;
+          //var d = this.__data__;
 
-          if (d.x < 50)
-            return 'w';
-          else if (d.x < 50 && d.y < 10)
-            return 'se';
-          else if (d.x > 173)
-            return 'e';
-          else if (d.x > 173 && d.y > 20)
-            return 'nw'
-          else if (d.y > 20)
-            return 's';
-          else if (d.y > 20 && d.x < 50)
+          var x = this.attributes.x.value;
+          var y = this.attributes.y.value;
+          // corners
+          if (x < width / 2 && y < height / 2)
             return 'nw';
-          else if (d.y > 20 && d.x > 173)
-            return 'nw'
+          else if (x > width / 2 && y < height / 2)
+            return 'ne';
+          else if (x < width / 2 && y > height / 2)
+            return 'sw';
+          else if (x > width / 2 && y > height / 2)
+            return 'se';
           else
             return 'n';
-          return $.fn.tipsy.autoWE;//d.x < 50 && d.x > 183 ? $.fn.tipsy.autoWE : $.fn.tipsy.autoNS;
+          // else if (d.x < 50 && d.y < 10)
+          //   return 'se';
+          // else if (d.x > 173)
+          //   return 'e';
+          // else if (d.x > 173 && d.y > 20)
+          //   return 'nw'
+          // else if (d.y > 20)
+          //   return 's';
+          // else if (d.y > 20 && d.x < 50)
+          //   return 'nw';
+          // else if (d.y > 20 && d.x > 173)
+          //   return 'nw'
+          // else
+          //   return 'n';
+          // return $.fn.tipsy.autoWE;//d.x < 50 && d.x > 183 ? $.fn.tipsy.autoWE : $.fn.tipsy.autoNS;
         },
         html: true,
         title: function() {
@@ -184,7 +194,7 @@ function heatmap () {
           var p = parties.filter(function (v) {
             return v.partyId === d.partyId;
           })[0];
-          return '<strong>' + d.question[Object.keys(d.question)[0]] + '</strong><br><q>' + (d.comment != '' ? d.comment : 'Ei kommentia') + '</q><br>- ' + d.person + ' (' + p.name + ')';
+          return '<p><strong>' + d.question[Object.keys(d.question)[0]] + '</strong></p><p><q>' + (d.comment != '' ? d.comment : 'Ei kommentia') + '</q></p><p>- ' + d.person + ' (' + p.name + ')</p>';
         }
       });
     });
