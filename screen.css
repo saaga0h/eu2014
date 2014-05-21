@@ -69,6 +69,10 @@ a:link {
   border: 1px solid rgba(0, 0, 0, 0.5);
   color: white;
   outline: none;
+  -webkit-transition: all .35s ease-in-out;
+  -moz-transition: all .35s ease-in-out;
+  -ms-transition: all .35s ease-in-out;
+  -o-transition: all .35s ease-in-out;
   transition: all .35s ease-in-out;
 }
 
