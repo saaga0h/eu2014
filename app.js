@@ -1,6 +1,7 @@
-window.App = window.App || {}
-window.App.n0 = window.App.n0 || {}
-window.App.n0.eu = window.App.n0.eu || {}
+/* global window, d3, $ */
+window.App = window.App || {};
+window.App.n0 = window.App.n0 || {};
+window.App.n0.eu = window.App.n0.eu || {};
 
 'use strict';
 /*
